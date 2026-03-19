@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcular meta</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body class="goals-page">
+    <nav>
+        <ul>
+            <li><a href="../HTML/calculateGoals.html">Calculate Goals</a></li>
+            <li><a href="../HTML/generateCalendar.html">Generate Calendar</a></li>
+            <li><a href="../HTML/perfil.html">Perfil</a></li>
+            <li><a href="#" id="logoutButton">Logout</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section class="goals-card">
+            <h1>Calcular meta</h1>
+            <p class="goals-subtitle">Aqui puedes calcular tu meta de ventas.</p>
+            <form class="goalsForm">
+                <input type="number" name="monthGoal" id="monthGoal" placeholder="Meta mensual" required>
+                <input type="number" name="Weekdays" id="Weekdays" placeholder="Días laborables" required>
+                <input type="number" name="ProgressTowardTheGoal" id="ProgressTowardTheGoal" placeholder="Avance de la meta" required>
+                <input type="number" name="daysRemaining" id="daysRemaining" placeholder="Días restantes" required>
+                <button type="submit">Calcular</button>
+            </form>
+            <div class="result goals-result">
+
+            </div>
+        </section>
+    </main>
+    <script src="../JS/script.js"></script>
+    <script src="../JS/calculateGoals.js"></script>
+</body>
+</html>
