@@ -236,6 +236,20 @@ body.goals-page {
 	align-items: center;
 }
 
+.goalsForm label {
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: #1b3c6b;
+	letter-spacing: 0.1px;
+	padding: 10px 12px;
+	border-radius: 10px;
+	background: linear-gradient(180deg, #f3f7ff 0%, #ebf2ff 100%);
+	border: 1px solid #d8e3f7;
+	align-self: stretch;
+	display: flex;
+	align-items: center;
+}
+
 .goalsForm input[type='number'] {
 	width: 100%;
 	padding: 12px 14px;
@@ -396,6 +410,13 @@ body.goals-page {
 		grid-template-columns: 1fr;
 	}
 
+	.goalsForm label {
+		padding: 8px 2px;
+		border: none;
+		background: transparent;
+		font-size: 0.92rem;
+	}
+
 	.result-header {
 		grid-template-columns: 1fr;
 	}
@@ -409,4 +430,83 @@ body.goals-page {
 	.targets-grid {
 		grid-template-columns: 1fr;
 	}
+}
+
+body.igv-page {
+    background: radial-gradient(circle at 85% 10%, #f0f4ff 0%, #f6f8fc 40%),
+        linear-gradient(180deg, #f6f8fc 0%, #ecf2ff 100%);
+}
+
+.igv-card {
+    background: #ffffff;
+    border: 1px solid #dbe4f7;
+    border-radius: 18px;
+    box-shadow: 0 16px 40px rgba(13, 38, 81, 0.12);
+    padding: 28px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.igv-card h1 {
+    margin: 0 0 16px;
+    font-size: 1.8rem;
+    color: #0f2f5f;
+    text-align: center;
+}
+
+#igvForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#igvForm label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1b3c6b;
+}
+
+#igvForm input[type="number"] {
+    padding: 12px 14px;
+    border: 1px solid #c4d3f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #1f2a37;
+    background: #fbfdff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#igvForm input[type="number"]:focus {
+    border-color: #2d63c8;
+    box-shadow: 0 0 0 3px rgba(45, 99, 200, 0.16);
+}
+
+#igvForm button[type="submit"] {
+    padding: 12px 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(120deg, #0f3a78, #2359a8);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+#igvForm button[type="submit"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(15, 58, 120, 0.35);
+}
+
+.igv-result {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid #d7e1f6;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+    min-height: 56px;
+    text-align: center;
+    font-size: 1rem;
+    color: #1f2a37;
 }

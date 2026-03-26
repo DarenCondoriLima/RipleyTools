@@ -1,9 +1,3 @@
-const DEFAULT_CREDENTIALS = [
-    { username: '250089', password: '250089' },
-    { username: '249825', password: '249825' },
-    { username: '249328', password: '249328' }
-];
-
 function readJsonFromStorage(key) {
     const rawValue = localStorage.getItem(key);
 
@@ -53,7 +47,7 @@ function checkLocalStorageCredentials() {
 }
 
 // Función para manejar el evento de login
-function handleLogin(event) {
+async function handleLogin(event) {
     event.preventDefault();
 
     const usernameInput = document.querySelector('input[placeholder="Username"]');
@@ -66,10 +60,29 @@ function handleLogin(event) {
 
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
-    const validCredentials = [...DEFAULT_CREDENTIALS];
-    const isValid = validCredentials.some((cred) => cred.username === username && cred.password === password);
+    const submitButton = event.target ? event.target.querySelector('button[type="submit"]') : null;
+
+    if (submitButton) {
+        submitButton.disabled = true;
+    }
+
+    if (typeof window.loginUsuario !== 'function') {
+        if (submitButton) {
+            submitButton.disabled = false;
+        }
+
+        alert('No se pudo conectar con el servicio de login.');
+        return;
+    }
+
+    const userData = await window.loginUsuario(username, password);
+    const isValid = !!userData;
 
     if (!isValid) {
+        if (submitButton) {
+            submitButton.disabled = false;
+        }
+
         alert('Credenciales incorrectas');
         return;
     }

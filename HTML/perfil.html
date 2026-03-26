@@ -9,8 +9,11 @@
 <body>
     <nav>
         <ul>
-            <li><a href="./calculateGoals.html">Calculate Goals</a></li>
-            <li><a href="./generateCalendar.html">Generate Calendar</a></li>
+            <li><a href="./calculateGoals.html">Calcular Metas</a></li>
+            <!-- <li><a href="./generateCalendar.html">Generar Calendario</a></li> -->
+            <!-- <li><a href="./callCustomers.html">Llamar CLientes</a></li> -->
+            <!-- <li><a href="./equipmentReport.html">Reportes de equipos</a></li> -->
+            <li><a href="./CalculateIGV.html">Calcular IGV</a></li>
             <li><a href="./perfil.html">Perfil</a></li>
             <li><a href="#" id="logoutButton">Logout</a></li>
         </ul>
@@ -23,5 +26,29 @@
     </main>
 
     <script src="../JS/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userInfoElement = document.getElementById('currentUserInfo');
+            const loggedUser = localStorage.getItem('loggedUser');
+
+            if (!loggedUser || typeof window.obtenerDatosUsuario !== 'function') {
+                userInfoElement.textContent = 'No se pudo cargar la información del usuario.';
+                return;
+            }
+
+            const userData = await window.obtenerDatosUsuario(parseInt(loggedUser, 10));
+
+            if (!userData) {
+                userInfoElement.textContent = 'No se encontraron datos para el usuario logueado.';
+                return;
+            }
+
+            userInfoElement.innerHTML = `
+                <p><strong>Código:</strong> ${userData.CodeR}</p>
+                <p><strong>Nombre:</strong> ${userData.Name}</p>
+                ${userData.UrlPassword ? `<p><strong>Foto/Enlace:</strong> <a href="${userData.UrlPassword}" target="_blank">Ver</a></p>` : ''}
+            `;
+        });
+    </script>
 </body>
 </html>

@@ -9,8 +9,11 @@
 <body class="goals-page">
     <nav>
         <ul>
-            <li><a href="./calculateGoals.html">Calculate Goals</a></li>
-            <li><a href="./generateCalendar.html">Generate Calendar</a></li>
+            <li><a href="./calculateGoals.html">Calcular Metas</a></li>
+            <!-- <li><a href="./generateCalendar.html">Generar Calendario</a></li> -->
+            <!-- <li><a href="./callCustomers.html">Llamar CLientes</a></li> -->
+            <!-- <li><a href="./equipmentReport.html">Reportes de equipos</a></li> -->
+            <li><a href="./CalculateIGV.html">Calcular IGV</a></li>
             <li><a href="./perfil.html">Perfil</a></li>
             <li><a href="#" id="logoutButton">Logout</a></li>
         </ul>
@@ -20,9 +23,13 @@
             <h1>Calcular meta</h1>
             <p class="goals-subtitle">Aqui puedes calcular tu meta de ventas.</p>
             <form class="goalsForm">
+                <label for="monthGoal"> Meta mensual</label>
                 <input type="number" name="monthGoal" id="monthGoal" placeholder="Meta mensual" required>
+                <label for="Weekdays">Días laborables</label>
                 <input type="number" name="Weekdays" id="Weekdays" placeholder="Días laborables" required>
+                <label for="ProgressTowardTheGoal">Avance de la meta</label>
                 <input type="number" name="ProgressTowardTheGoal" id="ProgressTowardTheGoal" placeholder="Avance de la meta" required>
+                <label for="daysRemaining">Días restantes</label>
                 <input type="number" name="daysRemaining" id="daysRemaining" placeholder="Días restantes" required>
                 <button type="submit">Calcular</button>
             </form>
