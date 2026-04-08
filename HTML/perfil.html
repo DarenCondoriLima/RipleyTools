@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
     <link rel="stylesheet" href="../CSS/style.css">
+    <script type="module">
+        import { loadNavbar } from '../JS/navbar.js';
+        loadNavbar();
+    </script>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="./calculateGoals.html">Calcular Metas</a></li>
-            <!-- <li><a href="./generateCalendar.html">Generar Calendario</a></li> -->
-            <!-- <li><a href="./callCustomers.html">Llamar CLientes</a></li> -->
-            <!-- <li><a href="./equipmentReport.html">Reportes de equipos</a></li> -->
-            <li><a href="./CalculateIGV.html">Calcular IGV</a></li>
-            <li><a href="./perfil.html">Perfil</a></li>
-            <li><a href="#" id="logoutButton">Logout</a></li>
-        </ul>
-    </nav>
+    <!-- Reemplazar navbar con include -->
+    <div w3-include-html="navbar.html"></div>
     <main>
         <section>
             <h1>Perfil de usuario</h1>

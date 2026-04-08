@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generar Calendario</title>
     <link rel="stylesheet" href="../CSS/style.css">
+    <script type="module">
+        import { loadNavbar } from '../JS/navbar.js';
+        loadNavbar();
+    </script>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="./calculateGoals.html">Calculate Goals</a></li>
-            <li><a href="./generateCalendar.html">Generate Calendar</a></li>
-            <li><a href="./perfil.html">Perfil</a></li>
-            <li><a href="#" id="logoutButton">Logout</a></li>
-        </ul>
-    </nav>
+    <!-- Reemplazar navbar con include -->
+    <div w3-include-html="navbar.html"></div>
     <script src="../JS/script.js"></script>
 </body>
 </html>

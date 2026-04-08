@@ -1,44 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcular meta</title>
+    <title>Calcular Metas de Ventas</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Estilos -->
     <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/navbar.css">
+    <link rel="stylesheet" href="../CSS/calculateGoals.css">
+    <!-- Navbar dinámico -->
+    <script type="module">
+        import { loadNavbar } from '../JS/navbar.js';
+        loadNavbar();
+    </script>
 </head>
 <body class="goals-page">
-    <nav>
-        <ul>
-            <li><a href="./calculateGoals.html">Calcular Metas</a></li>
-            <!-- <li><a href="./generateCalendar.html">Generar Calendario</a></li> -->
-            <!-- <li><a href="./callCustomers.html">Llamar CLientes</a></li> -->
-            <!-- <li><a href="./equipmentReport.html">Reportes de equipos</a></li> -->
-            <li><a href="./CalculateIGV.html">Calcular IGV</a></li>
-            <li><a href="./perfil.html">Perfil</a></li>
-            <li><a href="#" id="logoutButton">Logout</a></li>
-        </ul>
-    </nav>
-    <main>
-        <section class="goals-card">
-            <h1>Calcular meta</h1>
-            <p class="goals-subtitle">Aqui puedes calcular tu meta de ventas.</p>
-            <form class="goalsForm">
-                <label for="monthGoal"> Meta mensual</label>
-                <input type="number" name="monthGoal" id="monthGoal" placeholder="Meta mensual" required>
-                <label for="Weekdays">Días laborables</label>
-                <input type="number" name="Weekdays" id="Weekdays" placeholder="Días laborables" required>
-                <label for="ProgressTowardTheGoal">Avance de la meta</label>
-                <input type="number" name="ProgressTowardTheGoal" id="ProgressTowardTheGoal" placeholder="Avance de la meta" required>
-                <label for="daysRemaining">Días restantes</label>
-                <input type="number" name="daysRemaining" id="daysRemaining" placeholder="Días restantes" required>
-                <button type="submit">Calcular</button>
-            </form>
-            <div class="result goals-result">
 
+<main>
+    <!-- ===== FORMULARIO ===== -->
+    <div class="card">
+        <p class="page-title">Calculadora de Metas de Ventas</p>
+        <p class="page-sub">Ingresa tus datos para proyectar tus cierres diarios y hacer seguimiento de avance.</p>
+
+        <div class="form-grid">
+            <div class="field">
+                <label>Meta mensual (sin IGV)</label>
+                <input type="number" id="monthGoal" placeholder="Ej: 50000" min="0" step="any">
             </div>
-        </section>
-    </main>
-    <script src="../JS/script.js"></script>
-    <script src="../JS/calculateGoals.js"></script>
+            <div class="field">
+                <label>Días laborables del mes</label>
+                <input type="number" id="Weekdays" placeholder="Ej: 22" min="1">
+            </div>
+            <div class="field">
+                <label>Avance actual (sin IGV)</label>
+                <input type="number" id="ProgressTowardTheGoal" placeholder="Ej: 18000" min="0" step="any">
+            </div>
+            <div class="field">
+                <label>Días laborables restantes</label>
+                <input type="number" id="daysRemaining" placeholder="Ej: 10" min="0">
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="calculate()">Calcular metas</button>
+
+        <!-- Botones de herramientas -->
+        <div class="tool-row">
+            <button class="btn-tool" onclick="openModal('igv')">
+                <span class="icon">%</span> Calculadora IGV
+            </button>
+            <button class="btn-tool" onclick="openModal('calc')">
+                <span class="icon">#</span> Calculadora
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== RESULTADOS ===== -->
+    <div id="results" style="display:none">
+
+        <!-- KPIs -->
+        <div class="card">
+            <div id="alertBox" style="display:none" class="alert-success"></div>
+
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="kpi-label">Cumplimiento</div>
+                    <div class="kpi-val" id="kpiPct">—</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-label">Meta mensual</div>
+                    <div class="kpi-val" id="kpiGoal">—</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-label">Avance actual</div>
+                    <div class="kpi-val" id="kpiProg">—</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-label">Venta diaria histórica</div>
+                    <div class="kpi-val" id="kpiDaily">—</div>
+                </div>
+            </div>
+
+            <div class="progress-row">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progFill" style="width:0%"></div>
+                </div>
+                <span class="progress-pct" id="progText">0%</span>
+            </div>
+
+            <div class="pill-row">
+                <span class="pill" id="pillDays"></span>
+                <span class="pill" id="pillElapsed"></span>
+                <span class="pill" id="pillTotal"></span>
+                <span class="pill">IGV 18%</span>
+            </div>
+        </div>
+
+        <!-- Metas por nivel -->
+        <div class="card">
+            <div class="section-title">Metas por nivel de cumplimiento</div>
+            <div class="targets" id="targetsGrid"></div>
+        </div>
+    </div>
+</main>
+
+<!-- =====================================================
+     MODAL — Calculadora de IGV
+     ===================================================== -->
+<div class="modal-overlay" id="igvModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('igv')" aria-label="Cerrar">✕</button>
+        <h2>Calculadora de IGV</h2>
+        <p class="modal-sub">Ingresa el monto del POS (con IGV incluido) para descomponerlo en neto + IGV.</p>
+
+        <div class="field">
+            <label>Monto con IGV (reporte POS)</label>
+            <input type="number" id="igvInput" placeholder="Ej: 118.00" step="0.01" min="0" oninput="calcIgv()">
+        </div>
+
+        <div id="igvResult" style="display:none" class="igv-result">
+            <div class="igv-row">
+                <span>Subtotal (sin IGV)</span>
+                <strong id="igvNeto">—</strong>
+            </div>
+            <div class="igv-row">
+                <span>IGV (18%)</span>
+                <strong id="igvAmount">—</strong>
+            </div>
+            <div class="igv-row total">
+                <span>Total (monto POS)</span>
+                <strong id="igvTotal">—</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =====================================================
+     MODAL — Calculadora general
+     ===================================================== -->
+<div class="modal-overlay" id="calcModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('calc')" aria-label="Cerrar">✕</button>
+        <h2>Calculadora</h2>
+        <p class="modal-sub">Calculadora de uso general.</p>
+
+        <div class="calc-display" id="calcDisplay">0</div>
+
+        <div class="calc-grid">
+            <button class="calc-btn calc-clear"    onclick="calcAction('clear')">C</button>
+            <button class="calc-btn calc-op"       onclick="calcAction('sign')">+/−</button>
+            <button class="calc-btn calc-op"       onclick="calcAction('pct')">%</button>
+            <button class="calc-btn calc-op"       onclick="calcAction('op','/')">÷</button>
+
+            <button class="calc-btn calc-num"      onclick="calcAction('num','7')">7</button>
+            <button class="calc-btn calc-num"      onclick="calcAction('num','8')">8</button>
+            <button class="calc-btn calc-num"      onclick="calcAction('num','9')">9</button>
+            <button class="calc-btn calc-op"       onclick="calcAction('op','*')">×</button>
+
+            <button class="calc-btn calc-num"      onclick="calcAction('num','4')">4</button>
+            <button class="calc-btn calc-num"      onclick="calcAction('num','5')">5</button>
+            <button class="calc-btn calc-num"      onclick="calcAction('num','6')">6</button>
+            <button class="calc-btn calc-op"       onclick="calcAction('op','-')">−</button>
+
+            <button class="calc-btn calc-num"      onclick="calcAction('num','1')">1</button>
+            <button class="calc-btn calc-num"      onclick="calcAction('num','2')">2</button>
+            <button class="calc-btn calc-num"      onclick="calcAction('num','3')">3</button>
+            <button class="calc-btn calc-op"       onclick="calcAction('op','+')">+</button>
+
+            <button class="calc-btn calc-num calc-zero" onclick="calcAction('num','0')">0</button>
+            <button class="calc-btn calc-num"      onclick="calcAction('dot')">.</button>
+            <button class="calc-btn calc-eq"       onclick="calcAction('eq')">=</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="../JS/script.js"></script>
+<script src="../JS/calculateGoals.js"></script>
+
 </body>
 </html>

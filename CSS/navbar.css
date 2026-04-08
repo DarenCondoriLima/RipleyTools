@@ -1,0 +1,61 @@
+/* =========================================================
+   navbar.css  —  estilos del componente nav
+   Nota: las variables de color viven en style.css
+   ========================================================= */
+
+nav {
+    background: linear-gradient(135deg, var(--nav-bg-start), var(--nav-bg-end));
+    box-shadow: 0 2px 12px rgba(0,0,0,0.20);
+    padding:    10px 20px;
+    position:   sticky;
+    top:        0;
+    z-index:    20;
+}
+
+nav ul {
+    list-style:  none;
+    margin:      0;
+    padding:     0;
+    display:     flex;
+    flex-wrap:   wrap;
+    gap:         8px;
+    align-items: center;
+}
+
+nav li { margin: 0; }
+
+nav a {
+    display:         inline-block;
+    text-decoration: none;
+    color:           var(--nav-text);
+    background:      var(--nav-link-bg);
+    border:          1px solid rgba(255,255,255,0.15);
+    padding:         7px 14px;
+    border-radius:   999px;
+    font-weight:     600;
+    font-size:       0.88rem;
+    letter-spacing:  .15px;
+    transition:      transform .2s ease, background-color .2s ease, border-color .2s ease;
+}
+
+nav a:hover {
+    background:   var(--nav-link-hover);
+    border-color: rgba(255,255,255,0.30);
+    transform:    translateY(-1px);
+}
+
+nav a:active { transform: translateY(0); }
+
+#logoutButton {
+    background:   var(--logout-bg);
+    border-color: transparent;
+    color:        #fff;
+}
+
+#logoutButton:hover { background: var(--logout-hover); }
+
+@media (max-width: 640px) {
+    nav          { padding: 10px 12px; }
+    nav ul       { gap: 6px; }
+    nav a        { font-size: .82rem; padding: 6px 11px; }
+}

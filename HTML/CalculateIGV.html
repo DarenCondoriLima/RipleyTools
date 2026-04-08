@@ -5,25 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcular IGV</title>
     <link rel="stylesheet" href="../CSS/style.css">
+    <script type="module">
+        import { loadNavbar } from '../JS/navbar.js';
+        loadNavbar();
+    </script>
 </head>
 <body class="igv-page">
-    <nav>
-        <ul>
-            <li><a href="./calculateGoals.html">Calcular Metas</a></li>
-            <!-- <li><a href="./generateCalendar.html">Generar Calendario</a></li> -->
-            <!-- <li><a href="./callCustomers.html">Llamar CLientes</a></li> -->
-            <!-- <li><a href="./equipmentReport.html">Reportes de equipos</a></li> -->
-            <li><a href="./CalculateIGV.html">Calcular IGV</a></li>
-            <li><a href="./perfil.html">Perfil</a></li>
-            <li><a href="#" id="logoutButton">Logout</a></li>
-        </ul>
-    </nav>
+    <!-- Reemplazar navbar con include -->
+    <div w3-include-html="navbar.html"></div>
     <main>
         <section class="igv-card">
             <h1>Calcular IGV</h1>
             <form id="igvForm">
                 <label for="amount">Monto</label>
-                <input type="number" id="amount" name="amount" placeholder="Ingrese el monto" required>
+                <input type="number" id="amount" name="amount" placeholder="Ingrese el monto" step="0.01" min="0" required>
                 <button type="submit">Calcular</button>
             </form>
             <div id="result" class="igv-result">
@@ -36,20 +31,36 @@
             event.preventDefault();
 
             const amountInput = document.getElementById('amount');
-            const amount = parseFloat(amountInput.value);
+            const total = parseFloat(amountInput.value);
 
-            if (isNaN(amount) || amount <= 0) {
+            if (isNaN(total) || total <= 0) {
                 alert('Por favor, ingrese un monto válido.');
                 return;
             }
 
-            const igv = amount * 0.18;
-            const amountWithoutIGV = amount - igv;
+            // LÓGICA CORRECTA:
+            // Para quitar el IGV, dividimos entre 1.18
+            const amountWithoutIGV = total / 1.18;
+            // El IGV es la diferencia entre el total y el neto
+            const igv = total - amountWithoutIGV;
 
             const resultDiv = document.getElementById('result');
             resultDiv.innerHTML = `
-                <p>Monto sin IGV: <strong>S/. ${amountWithoutIGV.toFixed(2)}</strong></p>
-                <p>IGV calculado: <strong>S/. ${igv.toFixed(2)}</strong></p>
+                <div class="result-box">
+                    <div class="result-item">
+                        <span>Subtotal (Neto):</span>
+                        <strong>S/. ${amountWithoutIGV.toFixed(2)}</strong>
+                    </div>
+                    <div class="result-item">
+                        <span>IGV (18%):</span>
+                        <strong>S/. ${igv.toFixed(2)}</strong>
+                    </div>
+                    <hr>
+                    <div class="result-item total">
+                        <span>Total (Base):</span>
+                        <strong>S/. ${total.toFixed(2)}</strong>
+                    </div>
+                </div>
             `;
         });
     </script>

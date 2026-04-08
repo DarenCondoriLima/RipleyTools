@@ -1,15 +1,14 @@
+/* =========================================================
+   script.js  —  Auth, login, logout, perfil
+   ========================================================= */
+
+'use strict';
+
+/* ---- Helpers de localStorage ---- */
 function readJsonFromStorage(key) {
-    const rawValue = localStorage.getItem(key);
-
-    if (!rawValue) {
-        return null;
-    }
-
-    try {
-        return JSON.parse(rawValue);
-    } catch (error) {
-        return null;
-    }
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
 }
 
 function getCurrentCredentials() {
@@ -17,77 +16,66 @@ function getCurrentCredentials() {
 }
 
 function getLoginPath() {
-    if (window.location.pathname.includes('/HTML/')) {
-        return 'login.html';
-    }
-
-    return './HTML/login.html';
+    return window.location.pathname.includes('/HTML/')
+        ? 'login.html'
+        : './HTML/login.html';
 }
 
-// Función para verificar las credenciales en el localStorage al cargar la página
+/* ---- Verificar login ---- */
+function verifyLoginStatus() {
+    if (window.location.pathname.includes('login.html')) return;
+    if (readJsonFromStorage('isLoggedIn') !== true) {
+        window.location.href = getLoginPath();
+    }
+}
+
+/* ---- Prellenar credenciales guardadas ---- */
 function checkLocalStorageCredentials() {
-    if (!window.location.pathname.includes('login.html')) {
-        return;
-    }
+    if (!window.location.pathname.includes('login.html')) return;
 
-    const usernameInput = document.querySelector('input[placeholder="Username"]');
-    const passwordInput = document.querySelector('input[placeholder="Password"]');
-    const saveCheckbox = document.querySelector('#Save');
+    const userInput = document.querySelector('input[placeholder="Username"]');
+    const passInput = document.querySelector('input[placeholder="Password"]');
+    const saveChk   = document.querySelector('#Save');
+    if (!userInput || !passInput || !saveChk) return;
 
-    if (!usernameInput || !passwordInput || !saveCheckbox) {
-        return;
-    }
-
-    const savedCredentials = readJsonFromStorage('credentials');
-    if (savedCredentials) {
-        usernameInput.value = savedCredentials.username;
-        passwordInput.value = savedCredentials.password;
-        saveCheckbox.checked = true;
+    const saved = readJsonFromStorage('credentials');
+    if (saved) {
+        userInput.value  = saved.username;
+        passInput.value  = saved.password;
+        saveChk.checked  = true;
     }
 }
 
-// Función para manejar el evento de login
+/* ---- Manejar login ---- */
 async function handleLogin(event) {
     event.preventDefault();
 
-    const usernameInput = document.querySelector('input[placeholder="Username"]');
-    const passwordInput = document.querySelector('input[placeholder="Password"]');
-    const saveCheckbox = document.querySelector('#Save');
+    const userInput    = document.querySelector('input[placeholder="Username"]');
+    const passInput    = document.querySelector('input[placeholder="Password"]');
+    const saveChk      = document.querySelector('#Save');
+    if (!userInput || !passInput || !saveChk) return;
 
-    if (!usernameInput || !passwordInput || !saveCheckbox) {
-        return;
-    }
+    const username     = userInput.value.trim();
+    const password     = passInput.value.trim();
+    const submitButton = event.target?.querySelector('button[type="submit"]');
 
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-    const submitButton = event.target ? event.target.querySelector('button[type="submit"]') : null;
-
-    if (submitButton) {
-        submitButton.disabled = true;
-    }
+    if (submitButton) submitButton.disabled = true;
 
     if (typeof window.loginUsuario !== 'function') {
-        if (submitButton) {
-            submitButton.disabled = false;
-        }
-
+        if (submitButton) submitButton.disabled = false;
         alert('No se pudo conectar con el servicio de login.');
         return;
     }
 
     const userData = await window.loginUsuario(username, password);
-    const isValid = !!userData;
 
-    if (!isValid) {
-        if (submitButton) {
-            submitButton.disabled = false;
-        }
-
+    if (!userData) {
+        if (submitButton) submitButton.disabled = false;
         alert('Credenciales incorrectas');
         return;
     }
 
-    if (saveCheckbox.checked) {
+    if (saveChk.checked) {
         localStorage.setItem('credentials', JSON.stringify({ username, password }));
     } else {
         localStorage.removeItem('credentials');
@@ -98,102 +86,71 @@ async function handleLogin(event) {
     window.location.href = '../index.html';
 }
 
-// Función para verificar si el usuario está logueado
-function verifyLoginStatus() {
-    if (window.location.pathname.includes('login.html')) {
-        return;
-    }
-
-    const isLoggedIn = readJsonFromStorage('isLoggedIn') === true;
-    if (!isLoggedIn) {
-        window.location.href = getLoginPath();
-    }
-}
-
+/* ---- Logout ---- */
 function setupLogoutButton() {
-    const logoutButton = document.getElementById('logoutButton');
-    if (!logoutButton) {
-        return;
-    }
-
-    logoutButton.addEventListener('click', (event) => {
-        event.preventDefault();
+    const btn = document.getElementById('logoutButton');
+    if (!btn) return;
+    btn.addEventListener('click', e => {
+        e.preventDefault();
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('loggedUser');
         window.location.href = getLoginPath();
     });
 }
 
+/* ---- Login form ---- */
 function setupLoginForm() {
-    const loginForm = document.querySelector('.loginForm');
-    if (!loginForm) {
-        return;
-    }
-
-    loginForm.addEventListener('submit', handleLogin);
+    const form = document.querySelector('.loginForm');
+    if (form) form.addEventListener('submit', handleLogin);
 }
 
-// Función para mostrar tarjeta con credenciales guardadas
+/* ---- Tarjeta de credenciales guardadas ---- */
 function showSavedCredentialsCard() {
-    if (!window.location.pathname.includes('login.html')) {
-        return;
-    }
+    if (!window.location.pathname.includes('login.html')) return;
 
-    const savedCredentials = readJsonFromStorage('credentials');
-    const usernameInput = document.querySelector('input[placeholder="Username"]');
-    const passwordInput = document.querySelector('input[placeholder="Password"]');
-
-    if (!savedCredentials || !usernameInput || !passwordInput) {
-        return;
-    }
+    const saved     = readJsonFromStorage('credentials');
+    const userInput = document.querySelector('input[placeholder="Username"]');
+    const passInput = document.querySelector('input[placeholder="Password"]');
+    if (!saved || !userInput || !passInput) return;
 
     let card = document.getElementById('savedCredentialsCard');
-
     if (!card) {
-        card = document.createElement('button');
-        card.id = 'savedCredentialsCard';
-        card.type = 'button';
-        card.style.position = 'fixed';
-        card.style.bottom = '10px';
-        card.style.right = '10px';
-        card.style.padding = '10px';
-        card.style.border = '1px solid #ccc';
-        card.style.borderRadius = '5px';
-        card.style.backgroundColor = '#f9f9f9';
-        card.style.cursor = 'pointer';
+        card               = document.createElement('button');
+        card.id            = 'savedCredentialsCard';
+        card.type          = 'button';
+        card.style.cssText = `
+            position:fixed;bottom:10px;right:10px;padding:10px;
+            border:1px solid #ccc;border-radius:8px;background:#f9f9f9;
+            cursor:pointer;font-family:inherit;color:#173765;font-weight:600;
+        `;
         document.body.appendChild(card);
     }
 
-    card.textContent = `Usuario guardado: ${savedCredentials.username}`;
+    card.textContent = `Usuario guardado: ${saved.username}`;
     card.onclick = () => {
-        usernameInput.value = savedCredentials.username;
-        passwordInput.value = savedCredentials.password;
+        userInput.value = saved.username;
+        passInput.value = saved.password;
     };
 }
 
+/* ---- Perfil ---- */
 function setupProfileInfo() {
-    if (!window.location.pathname.includes('perfil.html')) {
-        return;
-    }
-
-    const currentUserInfo = document.getElementById('currentUserInfo');
-
-    if (!currentUserInfo) {
-        return;
-    }
+    if (!window.location.pathname.includes('perfil.html')) return;
+    const el = document.getElementById('currentUserInfo');
+    if (!el) return;
 
     const loggedUser = localStorage.getItem('loggedUser');
-    const currentCredentials = getCurrentCredentials();
-    const usernameToShow = loggedUser || (currentCredentials ? currentCredentials.username : null);
+    const creds      = getCurrentCredentials();
+    const toShow     = loggedUser || (creds ? creds.username : null);
 
-    if (usernameToShow) {
-        currentUserInfo.textContent = `Usuario actual: ${usernameToShow}`;
-        return;
-    }
-
-    currentUserInfo.textContent = 'No hay datos de usuario para mostrar.';
+    el.textContent = toShow
+        ? `Usuario actual: ${toShow}`
+        : 'No hay datos de usuario para mostrar.';
 }
 
+/* =========================================================
+   INIT
+   ========================================================= */
 document.addEventListener('DOMContentLoaded', () => {
     verifyLoginStatus();
     checkLocalStorageCredentials();
