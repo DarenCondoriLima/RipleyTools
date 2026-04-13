@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Clientes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/navbar.css">
+    <link rel="stylesheet" href="../CSS/clients.css">
+
+    <!--
+        ORDEN CRÍTICO DE SCRIPTS:
+        1. Supabase CDN  → expone window.supabase
+        2. app.js        → crea window.supabaseClient  (usa window.supabase)
+        3. El resto carga al final del body después del DOM
+    -->
+
+    <script type="module">
+        import { loadNavbar } from '../JS/navbar.js';
+        loadNavbar();
+    </script>
+</head>
+<body class="clients-page">
+
+<main>
+    <p class="page-title">Mis Clientes</p>
+    <p class="page-sub">Gestiona tus prospectos del mes y registra tus cierres de tarjeta y préstamo.</p>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="clients"  onclick="switchTab('clients')">👥 Prospectos</button>
+        <button class="tab-btn"        data-tab="closings" onclick="switchTab('closings')">🏆 Cierres</button>
+    </div>
+
+    <!-- ===================================================
+         PANEL: PROSPECTOS
+         =================================================== -->
+    <div class="tab-panel active" id="panel-clients">
+        <div class="card">
+
+            <div class="month-row">
+                <label for="monthClients">Mes:</label>
+                <input type="month" id="monthClients">
+            </div>
+
+            <div class="summary-row">
+                <span class="s-pill gray"  id="summaryTotal">0 clientes</span>
+                <span class="s-pill green" id="summaryContacted">0 contactados</span>
+                <span class="s-pill blue"  id="summaryCard">0 tarjeta</span>
+                <span class="s-pill amber" id="summaryLoan">0 préstamo</span>
+            </div>
+
+            <!-- Formulario alta / edición -->
+            <div class="add-form">
+                <div class="add-form-title">+ Nuevo prospecto</div>
+                <form id="formAddClient" autocomplete="off">
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="cName">Nombre completo</label>
+                            <input type="text" id="cName" placeholder="Juan Pérez" required>
+                        </div>
+                        <div class="field">
+                            <label for="cPhone">Teléfono</label>
+                            <input type="tel" id="cPhone" placeholder="987 654 321" required>
+                        </div>
+                        <div class="field">
+                            <label for="cDNI">DNI</label>
+                            <input type="text" id="cDNI" placeholder="12345678" maxlength="8" required>
+                        </div>
+                    </div>
+                    <div class="checks-row">
+                        <label class="check-label">
+                            <input type="checkbox" id="cCard">
+                            <span class="chip-card">Tarjeta</span> Quiere tarjeta
+                        </label>
+                        <label class="check-label">
+                            <input type="checkbox" id="cLoan">
+                            <span class="chip-loan">Préstamo</span> Quiere préstamo
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <div class="field" style="grid-column:1/-1">
+                            <label for="cNotes">Observaciones (opcional)</label>
+                            <textarea id="cNotes" placeholder="Ej: llamar después de las 6pm…"></textarea>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                        <button type="submit" class="btn-add">+ Agregar prospecto</button>
+                        <button type="button" id="cancelEditBtn"
+                                style="display:none"
+                                class="btn-icon danger-btn">
+                            ✕ Cancelar edición
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Búsqueda y filtros -->
+            <div class="search-bar">
+                <input type="text" id="searchClients" placeholder="Buscar por nombre, teléfono o DNI…">
+                <label class="filter-check">
+                    <input type="checkbox" id="filterPending"> Solo pendientes
+                </label>
+            </div>
+
+            <div class="clients-list" id="clientsList">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================
+         PANEL: CIERRES
+         =================================================== -->
+    <div class="tab-panel" id="panel-closings">
+        <div class="card">
+
+            <div class="month-row">
+                <label for="monthClosings">Mes:</label>
+                <input type="month" id="monthClosings">
+            </div>
+
+            <div class="summary-row">
+                <span class="s-pill gray"  id="closingsTotal">0 cierres</span>
+                <span class="s-pill blue"  id="closingsCard">0 tarjetas</span>
+                <span class="s-pill amber" id="closingsLoan">0 préstamos</span>
+            </div>
+
+            <div class="add-form">
+                <div class="add-form-title">+ Registrar cierre directo</div>
+                <form id="formAddClosing" autocomplete="off">
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="clName">Nombre completo</label>
+                            <input type="text" id="clName" placeholder="María López" required>
+                        </div>
+                        <div class="field">
+                            <label for="clPhone">Teléfono</label>
+                            <input type="tel" id="clPhone" placeholder="987 654 321" required>
+                        </div>
+                        <div class="field">
+                            <label for="clDNI">DNI</label>
+                            <input type="text" id="clDNI" placeholder="12345678" maxlength="8" required>
+                        </div>
+                    </div>
+                    <div class="checks-row">
+                        <label class="check-label">
+                            <input type="checkbox" id="clCard">
+                            <span class="chip-card">Tarjeta</span> Obtuvo tarjeta
+                        </label>
+                        <label class="check-label">
+                            <input type="checkbox" id="clLoan">
+                            <span class="chip-loan">Préstamo</span> Obtuvo préstamo
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <div class="field" style="grid-column:1/-1">
+                            <label for="clNotes">Observaciones (opcional)</label>
+                            <textarea id="clNotes" placeholder="Monto aprobado, tipo de producto, etc…"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-add">+ Registrar cierre</button>
+                </form>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="searchClosings" placeholder="Buscar por nombre, teléfono o DNI…">
+            </div>
+
+            <div class="clients-list" id="closingsList">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ===================================================
+     MODAL — Confirmar cierre desde prospectos
+     =================================================== -->
+<div class="modal-overlay" id="moveClosingModal">
+    <div class="modal">
+        <button class="modal-close" aria-label="Cerrar"
+                onclick="document.getElementById('moveClosingModal').classList.remove('open')">✕</button>
+        <h2>Registrar cierre</h2>
+        <p class="modal-sub">¿Qué producto obtuvo <strong id="mcName"></strong>?</p>
+        <input type="hidden" id="mcClientId">
+        <div class="checks-row" style="margin-bottom:22px">
+            <label class="check-label">
+                <input type="checkbox" id="mcGotCard">
+                <span class="chip-card">Tarjeta</span> Obtuvo tarjeta
+            </label>
+            <label class="check-label">
+                <input type="checkbox" id="mcGotLoan">
+                <span class="chip-loan">Préstamo</span> Obtuvo préstamo
+            </label>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn-add" id="confirmMoveBtn">🏆 Confirmar cierre</button>
+            <button class="btn-icon danger-btn"
+                    onclick="document.getElementById('moveClosingModal').classList.remove('open')">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../JS/app.js"></script>
+<script src="../JS/script.js"></script>
+<script src="../JS/clients.js"></script>
+
+</body>
+</html>

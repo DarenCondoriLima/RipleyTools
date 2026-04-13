@@ -7,6 +7,7 @@ export function loadNavbar() {
         <nav>
             <ul>
                 <li><a href="./calculateGoals.html">Calcular Metas</a></li>
+                <li><a href="./clients.html">Mis Clientes</a></li>
                 <!-- <li><a href="./generateCalendar.html">Generar Calendario</a></li> -->
                 <!-- <li><a href="./callCustomers.html">Llamar Clientes</a></li>    -->
                 <!-- <li><a href="./equipmentReport.html">Reportes de Equipos</a></li> -->

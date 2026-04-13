@@ -1,83 +1,51 @@
+/* =========================================================
+   app.js  —  Inicialización de Supabase + funciones globales
+   Debe cargarse UNA SOLA VEZ, DESPUÉS del CDN de Supabase.
+   ========================================================= */
+
+'use strict';
+
 const SUPABASE_URL = 'https://mkgkvudwllxeuokaiszz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rZ2t2dWR3bGx4ZXVva2Fpc3p6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMDI0MTMsImV4cCI6MjA4OTg3ODQxM30.m1EuwKezHWfWU_Bw2fVklY-106dDa2ovPjAlcmET6gk';
-let supabaseClient = null;
 
-if (window.supabase && typeof window.supabase.createClient === 'function') {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-} else {
-    console.error('No se pudo inicializar Supabase: falta la libreria @supabase/supabase-js en la pagina.');
+/* Guarda contra doble carga del script */
+if (!window.supabaseClient) {
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    } else {
+        console.error('app.js: No se encontró @supabase/supabase-js. Carga el CDN antes de app.js.');
+    }
 }
 
-// Ejemplo: Función para loguear a un usuario por su CodeR
+/* ---- Login ---- */
 async function loginUsuario(codigo, pass) {
-    if (!supabaseClient) {
-        return null;
-    }
-
-    const { data, error } = await supabaseClient
-        .from('users')
-        .select('*')
-        .eq('coder', codigo)
-        .eq('password', pass) 
-        .single();
-
-    if (error) {
-        console.error("Error al entrar:", error.message);
-        return null;
-    }
-    
+    if (!window.supabaseClient) return null;
+    const { data, error } = await window.supabaseClient
+        .from('users').select('*')
+        .eq('coder', codigo).eq('password', pass).single();
+    if (error) { console.error('loginUsuario:', error.message); return null; }
     return data;
 }
 
-// Ejemplo: Obtener el horario de un usuario
+/* ---- Horario ---- */
 async function obtenerHorario(codigo) {
-    if (!supabaseClient) {
-        return null;
-    }
-
-    const { data, error } = await supabaseClient
-        .from('schedule') // Prueba 'schedule' en minúscula
-        .select('*')
-        .eq('CodeR', codigo); // CAMBIADO: 'C' y 'R' en mayúscula
-        
+    if (!window.supabaseClient) return null;
+    const { data, error } = await window.supabaseClient
+        .from('schedule').select('*').eq('coder', codigo);
+    if (error) { console.error('obtenerHorario:', error.message); return null; }
     return data;
 }
 
-// Ejemplo: Obtener el horario de un usuario
-async function obtenerHorario(codigo) {
-    if (!supabaseClient) {
-        return null;
-    }
-
-    const { data, error } = await supabaseClient
-        .from('Schedule')
-        .select('*')
-        .eq('CodeR', codigo);
-        
-    return data;
-}
-
-// Función para obtener los datos del usuario logueado
+/* ---- Datos del usuario ---- */
 async function obtenerDatosUsuario(codigo) {
-    if (!supabaseClient) {
-        console.error("Supabase no está inicializado.");
-        return null;
-    }
-
-    const { data, error } = await supabaseClient
-        .from('Users')
-        .select('CodeR, Name, UrlPassword')
-        .eq('CodeR', codigo)
-        .single();
-
-    if (error) {
-        console.error("Error al obtener datos del usuario:", error.message);
-        return null;
-    }
-
+    if (!window.supabaseClient) return null;
+    const { data, error } = await window.supabaseClient
+        .from('users').select('coder, name, role')
+        .eq('coder', codigo).single();
+    if (error) { console.error('obtenerDatosUsuario:', error.message); return null; }
     return data;
 }
 
-window.loginUsuario = loginUsuario;
-window.obtenerHorario = obtenerHorario;
+window.loginUsuario        = loginUsuario;
+window.obtenerHorario      = obtenerHorario;
 window.obtenerDatosUsuario = obtenerDatosUsuario;
