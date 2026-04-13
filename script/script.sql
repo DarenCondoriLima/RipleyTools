@@ -66,3 +66,43 @@ create table closings (
 -- Índices para búsquedas por vendedor y mes
 create index idx_clients_coder_month  on clients  (coder, month);
 create index idx_closings_coder_month on closings (coder, month);
+
+-- =========================================================
+-- 1. HABILITAR RLS EN TODAS LAS TABLAS
+-- =========================================================
+ALTER TABLE Users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE Goals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE Schedule ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE closings ENABLE ROW LEVEL SECURITY;
+
+-- =========================================================
+-- 2. CREAR POLÍTICAS (MODO COMPATIBILIDAD CON TU CÓDIGO)
+-- Estas políticas permiten que tu código actual basado en 'anon'
+-- siga leyendo e insertando datos sin arrojar Error 403.
+-- =========================================================
+
+-- Tabla: Users
+CREATE POLICY "Acceso anon a Users" 
+ON Users FOR ALL TO anon 
+USING (true);
+
+-- Tabla: Goals
+CREATE POLICY "Acceso anon a Goals" 
+ON Goals FOR ALL TO anon 
+USING (true);
+
+-- Tabla: Schedule
+CREATE POLICY "Acceso anon a Schedule" 
+ON Schedule FOR ALL TO anon 
+USING (true);
+
+-- Tabla: clients
+CREATE POLICY "Acceso anon a clients" 
+ON clients FOR ALL TO anon 
+USING (true);
+
+-- Tabla: closings
+CREATE POLICY "Acceso anon a closings" 
+ON closings FOR ALL TO anon 
+USING (true);

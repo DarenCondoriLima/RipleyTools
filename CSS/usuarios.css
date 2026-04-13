@@ -1,0 +1,161 @@
+/* =========================================================
+   usuarios.css  —  Gestion de usuarios
+   ========================================================= */
+
+body.users-page {
+    background: radial-gradient(circle at 12% 85%, #dce8ff 0%, #f6f8fc 42%),
+                linear-gradient(160deg, #f6f8fc 0%, #edf2ff 100%);
+}
+
+[data-theme="dark"] body.users-page {
+    background: radial-gradient(circle at 12% 85%, #111b2b 0%, #0e1117 42%),
+                linear-gradient(160deg, #0e1117 0%, #121826 100%);
+}
+
+.wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 16px 56px;
+}
+
+.card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(13,38,81,0.08);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+[data-theme="dark"] .card { box-shadow: 0 8px 28px rgba(0,0,0,0.4); }
+
+.card h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 14px;
+}
+
+.add-user-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    align-items: center;
+}
+
+.add-user-form input,
+.add-user-form select {
+    padding: 10px 12px;
+    border: 1px solid #d1d9e6;
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    font-family: var(--font);
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.add-user-form input:focus,
+.add-user-form select:focus {
+    border-color: var(--primary-mid);
+    box-shadow: 0 0 0 3px rgba(55,138,221,0.14);
+}
+
+[data-theme="dark"] .add-user-form input,
+[data-theme="dark"] .add-user-form select {
+    background: #0f141c;
+    border-color: #2a3442;
+    color: var(--text);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #0f3a78, #2359a8);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: transform .18s, box-shadow .18s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(15,58,120,0.35);
+}
+
+/* ---- Table ---- */
+#usersTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+#usersTable thead th {
+    text-align: left;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-muted);
+    padding: 10px 8px;
+    border-bottom: 1px solid #e2e8f4;
+}
+
+#usersTable tbody td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #eef2f7;
+    color: var(--text);
+}
+
+#usersTable tbody tr:hover {
+    background: var(--primary-light);
+}
+
+[data-theme="dark"] #usersTable thead th {
+    border-bottom-color: #243047;
+}
+
+[data-theme="dark"] #usersTable tbody td {
+    border-bottom-color: #1f2a3b;
+}
+
+[data-theme="dark"] #usersTable tbody tr:hover {
+    background: #162235;
+}
+
+#usersTable button {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #f2c1c1;
+    background: var(--danger-light);
+    color: var(--danger);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .1s;
+}
+
+#usersTable button:hover {
+    background: #f7c1c1;
+    border-color: #f09595;
+}
+
+[data-theme="dark"] #usersTable button {
+    background: #2a1919;
+    border-color: #5a2e2e;
+}
+
+[data-theme="dark"] #usersTable button:hover {
+    background: #3a2020;
+}
+
+@media (max-width: 560px) {
+    .add-user-form { grid-template-columns: 1fr; }
+    .btn { width: 100%; }
+}

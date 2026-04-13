@@ -117,6 +117,7 @@ async function handleLogin(event) {
 
     localStorage.setItem('isLoggedIn', JSON.stringify(true));
     localStorage.setItem('loggedUser', username);
+    localStorage.setItem('userRole', userData.role);
     window.location.href = '../index.html';
 }
 

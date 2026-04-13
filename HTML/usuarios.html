@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrar Usuarios</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/navbar.css">
+    <link rel="stylesheet" href="../CSS/usuarios.css">
+    <script type="module">
+        import { loadNavbar } from '../JS/navbar.js';
+        loadNavbar();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../JS/app.js"></script>
+</head>
+<body class="users-page">
+    <main class="wrap">
+        <div class="card">
+            <h2>Gestión de Usuarios</h2>
+            <div class="add-user-form">
+                <input type="text" id="newCoder" placeholder="Coder">
+                <input type="text" id="newUsername" placeholder="Username">
+                <input type="password" id="newPassword" placeholder="Password">
+                <select id="newRole">
+                    <option value="User">Usuario Estándar</option>
+                    <option value="Admin">Administrador</option>
+                </select>
+                <button class="btn" onclick="createUser()">+ Agregar Usuario</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <table id="usersTable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Coder</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usersList">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="../JS/script.js"></script>
+    <script src="../JS/usuarios.js"></script>
+</body>
+</html>
