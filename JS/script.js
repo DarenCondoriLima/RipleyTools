@@ -4,11 +4,45 @@
 
 'use strict';
 
+const THEME_KEY = 'theme';
+
 /* ---- Helpers de localStorage ---- */
 function readJsonFromStorage(key) {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
     try { return JSON.parse(raw); } catch { return null; }
+}
+
+function getPreferredTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'dark' || saved === 'light') return saved;
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    }
+    return 'light';
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    updateThemeToggleLabel(theme);
+}
+
+function updateThemeToggleLabel(theme) {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    btn.setAttribute('aria-pressed', theme === 'dark');
+    btn.textContent = theme === 'dark' ? 'Modo claro' : 'Modo oscuro';
+}
+
+function setupThemeToggle() {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+    });
 }
 
 function getCurrentCredentials() {
@@ -118,11 +152,6 @@ function showSavedCredentialsCard() {
         card               = document.createElement('button');
         card.id            = 'savedCredentialsCard';
         card.type          = 'button';
-        card.style.cssText = `
-            position:fixed;bottom:10px;right:10px;padding:10px;
-            border:1px solid #ccc;border-radius:8px;background:#f9f9f9;
-            cursor:pointer;font-family:inherit;color:#173765;font-weight:600;
-        `;
         document.body.appendChild(card);
     }
 
@@ -152,6 +181,8 @@ function setupProfileInfo() {
    INIT
    ========================================================= */
 document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(getPreferredTheme());
+    setupThemeToggle();
     verifyLoginStatus();
     checkLocalStorageCredentials();
     setupLoginForm();

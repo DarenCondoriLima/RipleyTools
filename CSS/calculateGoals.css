@@ -8,6 +8,11 @@ body.goals-page {
                 linear-gradient(180deg, #f6f8fc 0%, #ecf2ff 100%);
 }
 
+[data-theme="dark"] body.goals-page {
+    background: radial-gradient(circle at 85% 10%, #111b2b 0%, #0e1117 40%),
+                linear-gradient(180deg, #0e1117 0%, #121826 100%);
+}
+
 .goals-page main {
     max-width: 940px;
     margin:    0 auto;
@@ -23,6 +28,8 @@ body.goals-page {
     padding:       24px;
     margin-bottom: 20px;
 }
+
+[data-theme="dark"] .card { box-shadow: 0 8px 28px rgba(0,0,0,0.4); }
 
 /* ---- Page heading ---- */
 .page-title {
@@ -66,6 +73,12 @@ body.goals-page {
     background:    #fafbfe;
     outline:       none;
     transition:    border-color .2s, box-shadow .2s;
+}
+
+[data-theme="dark"] .field input[type='number'] {
+    background: #0f141c;
+    border-color: #2a3442;
+    color: var(--text);
 }
 
 .field input[type='number']:focus {
@@ -121,6 +134,12 @@ body.goals-page {
     transition:    all .18s;
 }
 
+[data-theme="dark"] .btn-tool {
+    background: #162235;
+    border-color: rgba(95,160,255,0.4);
+    color: var(--primary);
+}
+
 .btn-tool:hover {
     background: #cfe5f8;
     transform:  translateY(-1px);
@@ -142,6 +161,8 @@ body.goals-page {
     padding:       14px;
     text-align:    center;
 }
+
+[data-theme="dark"] .kpi { background: #1a202a; }
 
 .kpi-label {
     font-size:      0.72rem;
@@ -173,6 +194,11 @@ body.goals-page {
     border-radius: 999px;
     overflow:      hidden;
     border:        0.5px solid var(--border);
+}
+
+[data-theme="dark"] .progress-track {
+    background: #1c2430;
+    border-color: rgba(255,255,255,0.14);
 }
 
 .progress-fill {
@@ -221,6 +247,12 @@ body.goals-page {
     text-align:    center;
 }
 
+[data-theme="dark"] .alert-success {
+    background: #0f2618;
+    color: #7ddf7a;
+    border-color: rgba(125,223,122,0.35);
+}
+
 /* ---- Targets grid ---- */
 .section-title {
     font-size:     1.05rem;
@@ -243,11 +275,18 @@ body.goals-page {
     transition:    transform .15s;
 }
 
+[data-theme="dark"] .t-card { border-color: #243047; }
+
 .t-card:hover { transform: translateY(-2px); }
 
 .t-card.achieved {
     background:   #ecfdf5;
     border-color: #6ee7b7;
+}
+
+[data-theme="dark"] .t-card.achieved {
+    background: #0f2218;
+    border-color: rgba(125,223,122,0.45);
 }
 
 .t-head {
@@ -283,6 +322,8 @@ body.goals-page {
 
 hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
 
+[data-theme="dark"] hr.light { border-top-color: #263246; }
+
 /* =========================================================
    MODALES
    ========================================================= */
@@ -297,6 +338,8 @@ hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
     padding:         16px;
 }
 
+[data-theme="dark"] .modal-overlay { background: rgba(3,7,14,0.7); }
+
 .modal-overlay.open { display: flex; }
 
 .modal {
@@ -309,6 +352,8 @@ hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
     position:      relative;
     animation:     slideUp .25s ease-out;
 }
+
+[data-theme="dark"] .modal { box-shadow: 0 24px 60px rgba(0,0,0,0.55); }
 
 @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
@@ -334,6 +379,8 @@ hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
     transition:    background .15s;
 }
 
+[data-theme="dark"] .modal-close { background: #1a202a; }
+
 .modal-close:hover { background: var(--gray-100); }
 
 .modal h2 {
@@ -356,6 +403,10 @@ hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
     border:        1px solid rgba(55,138,221,0.20);
     border-radius: var(--radius-sm);
     padding:       16px;
+}
+
+[data-theme="dark"] .igv-result {
+    border-color: rgba(95,160,255,0.25);
 }
 
 .igv-row {
@@ -381,6 +432,8 @@ hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
     font-size: 1.05rem;
 }
 
+[data-theme="dark"] .igv-row.total strong { color: var(--text); }
+
 /* ---- Calculadora ---- */
 .calc-display {
     background:    #0b1d3a;
@@ -396,6 +449,11 @@ hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
     overflow:      hidden;
     word-break:    break-all;
     letter-spacing: .5px;
+}
+
+[data-theme="dark"] .calc-display {
+    background: #0b1220;
+    color: #9fd0ff;
 }
 
 .calc-grid {
@@ -426,6 +484,13 @@ hr.light { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
 .calc-clear           { background: var(--danger-light);  color: var(--danger); }
 .calc-clear:hover     { background: #f7c1c1; }
 .calc-zero            { grid-column: span 2; }
+
+[data-theme="dark"] .calc-num         { background: #1a202a; color: var(--text); }
+[data-theme="dark"] .calc-num:hover   { background: #243047; }
+[data-theme="dark"] .calc-op          { background: #162235; color: var(--primary); }
+[data-theme="dark"] .calc-op:hover    { background: #1f2f47; }
+[data-theme="dark"] .calc-clear       { background: #2a1919; color: var(--danger); }
+[data-theme="dark"] .calc-clear:hover { background: #3a2020; }
 
 /* =========================================================
    RESPONSIVE

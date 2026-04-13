@@ -12,6 +12,12 @@ export function loadNavbar() {
                 <!-- <li><a href="./callCustomers.html">Llamar Clientes</a></li>    -->
                 <!-- <li><a href="./equipmentReport.html">Reportes de Equipos</a></li> -->
                 <!-- <li><a href="./perfil.html">Perfil</a></li>                    -->
+                <li class="nav-spacer"></li>
+                <li>
+                    <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">
+                        Modo oscuro
+                    </button>
+                </li>
                 <li><a href="#" id="logoutButton">Logout</a></li>
             </ul>
         </nav>
